@@ -1038,7 +1038,6 @@ async function reservarCita() {
         const resultado = await respuesta.json();
 
         if (resultado.resultado) {
-            await notificarBarberoWebSocket(barberoId, fecha, hora, servicios);
 
             Swal.fire({
                 icon: "success",
@@ -1063,65 +1062,6 @@ async function reservarCita() {
 }
 
 
-async function notificarBarberoWebSocket(barberoId, fecha, hora, servicios) {
-    try {
-        
-        const respuesta = await fetch('/notificar-barbero', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                barberoId: barberoId,
-                fecha: fecha,
-                hora: hora,
-                servicios: servicios.map(s => s.nombre)
-            })
-        });
-        
-        const resultado = await respuesta.json();
-        
-        // SI EL BARBERO NO ESTÁ CONECTADO, MOSTRAR NOTIFICACIÓN DEL NAVEGADOR
-        if (!resultado.online && 'Notification' in window && Notification.permission === 'granted') {
-            mostrarNotificacionPersistente({
-                fecha: fecha,
-                hora: hora,
-                mensaje: `Tienes una nueva cita pendiente para ${fecha} a las ${hora}`
-            });
-        }
-        
-        return resultado;
-        
-    } catch (error) {
-        
-        if ('Notification' in window && Notification.permission === 'granted') {
-            mostrarNotificacionPersistente({
-                fecha: fecha,
-                hora: hora,
-                mensaje: `Nueva cita reservada para ${fecha} a las ${hora}`
-            });
-        }
-        
-        throw error;
-    }
-}
 
-function mostrarNotificacionPersistente(data) {
-    try {
-        const notificacion = new Notification('Cita Pendiente - Barbershop', {
-            body: data.mensaje,
-            icon: '/build/img/logo.png',
-            tag: 'cita-pendiente',
-            requireInteraction: true,
-        });
-
-        notificacion.onclick = () => {
-            window.open('/barbero', '_blank');
-            notificacion.close();
-        };
-        
-    } catch (error) {
-    }
-}
 
 
