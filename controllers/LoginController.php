@@ -28,7 +28,7 @@ class LoginController{
                 if ($usuario) {
                     //verificar el password
                     if($usuario->comprobarPasswordAndVerificado($auth->password)){
-                        // autenticar el usuario
+
                         isSession();
 
                         $_SESSION['id'] = $usuario->id;
