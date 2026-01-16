@@ -552,13 +552,13 @@ p {
 }
 
 .tasa .tasa-bolivar {
-  background-color: #fae42c;
+  background-color: #020202;
   text-align: center;
   padding: 1rem;
   margin: 0;
 }
 .tasa p {
-  color: #020202;
+  color: #fae42c;
 }
 .tasa .boton {
   margin-top: 2rem;
